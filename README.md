@@ -1,3 +1,3 @@
 ## Longevity-Scilife
 
-Temporary data and script for Scilife drop-in. Workflow and scripts can be viewed [here](http://royfrancis.github.io/sc/).
+Temporary data and script for Scilife drop-in. This is html page for [this](https://github.com/royfrancis/sc) repo.
