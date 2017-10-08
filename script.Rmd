@@ -1,6 +1,6 @@
 ---
 title: "Longevity-Scilife"
-output: 
+output:
   bookdown::html_document2:
           toc: true
           toc_float: true
@@ -32,7 +32,7 @@ library(ggrepel) # for non overlapping text on ggplot
 source("functions.R")
 ```
 
-## Data 
+## Data
 
 The data is from Brain of Zebrafish. Data has been already low count filtered.
 
@@ -103,17 +103,60 @@ The general question I want to answer is which genes are differentially expresse
 
 Specific questions
 
-1. Is it better to include a batch effect in the GLM model OR to correct the batch effect using SVA/Combat etc?
+1. Is it better to include a batch effect in the GLM model OR to
+   correct the batch effect using SVA/Combat etc?
+
+   Talked with multiple people abouth this and some seem to support
+   the combat as better at taking care of these issues, whereas other
+   really emphasised including the batch as a parameter in the
+   model. The argument of the former was that he felt that blocking
+   often had a too big of on impact so one was in essence
+   over-compenstating. My take on this is that it will depend on the
+   data analysed, just as with many other selections.
 
 2. My batch correction using ComBat creates negative values. How do I deal with that?
 
-3. How do I include a continuous variable as a factor in my DESeq2 GLM model?
+   My take on this is that this should not happen
 
-4. What is the diference between Wald's test and LRT test? How and which one do I use?
 
-5. How do I test which is a better model? ~family+condition or ~rinbatch+family+condition etc.
+3. How do I include a continuous variable as a factor in my DESeq2 GLM
+   model?
 
-6. How do I test for DEGs between my conditions? How do I find out if family has an effect or how much effect it has?
+   Here I have no experience, but based on my reading of the DESeq2
+   manual it seems they support the idea of clustering non-factor data
+   into groups and then use these factor instead.
+
+
+4. What is the diference between Wald's test and LRT test? How and
+   which one do I use?
+
+   It seems that in the majority of cases wald is the best test to
+   use as it benefits of not having to include competing models, but
+   that also means that the interpretation of the results are slighly
+   different. Looking at the statistical side of it, the lrt should
+   estimate the confidence interval with better precision and is hence
+   "better", but it also more difficult to run since one have to fit
+   two models.
+
+5. How do I test which is a better model? ~family+condition or
+   ~rinbatch+family+condition etc.
+
+   Using lrt test you define a simpler and a more complex model and
+   then you will find support for one or the other. I am however not
+   sure you have enough data to include large number of entries as you
+   then need to estimate lots of contrasts which is costly
+   statistically.
+
+6. How do I test for DEGs between my conditions? How do I find out if
+   family has an effect or how much effect it has?
+
+   If there were no impact of family you should not see any
+   improvement in including family in the model. Given the structure
+   in your data, I think it is clear that there is a large family
+   effect. This is consistent with my previous experience where there
+   often are strong impacts of family on the data.
+
+
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE,echo=FALSE,results="hide"}
 rmarkdown::render("script.Rmd")
