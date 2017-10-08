@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2017-10-08 Sun 08:43 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zebrafish batch effects</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Thomas Källman" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" href="https://thokall.github.io/org_export/org.css" type="text/css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Zebrafish batch effects</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd3c736f">1. Batch isssues with rna-seq data</a>
+<ul>
+<li><a href="#orgb598755">1.1. Blocking and normal voom</a></li>
+<li><a href="#org6d0d1d9">1.2. Blocking and voom with weights</a></li>
+<li><a href="#orgb50298b">1.3. Omitting the "odd" samples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd3c736f" class="outline-2">
+<h2 id="orgd3c736f"><span class="section-number-2">1</span> Batch isssues with rna-seq data</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The lack of clustering of the problematic samples is not trivial to
+resolve. It might be that including batch effect would reduce the
+issue, but it is certainly not certain that you will resolve the issue
+due to this as therse data points is not forming any kind of coherent
+group, but is found at two different places far from the "good"
+samples. I would hence based on this pattern and the fact that it
+corresponds to slightly lower RIN values consider omitting this
+samples all together. Optimally I would however like to have other
+data to back that exclusion.
+</p>
+
+<p>
+So based on your analysis I decided to try to use a, for me not very
+commonly applied, function from the limma package. The
+voomWithQualityWeigths function is doing the same thing as limmas voom
+function, but instead of only adding weights to genes it try to
+estimates samples weights in an attempt to put less emphasis in
+samples that globally have a different pattern. Since this is outside
+my comfort zone I encourage you to read up on this in the limma manual
+as well as the 2006 paper describing how to jointly weight both genes
+and arrays in a linera model approach.
+</p>
+</div>
+
+<div id="outline-container-orgb598755" class="outline-3">
+<h3 id="orgb598755"><span class="section-number-3">1.1</span> Blocking and normal voom</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+This is basically the same as your DEseq2 analysis and blocks the
+family effect. As with your analysis this analysis does not find any
+significant genes between sat and lat after multiple correction.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #e9b2e3;">library</span>(limma)
+<span style="color: #e9b2e3;">library</span>(edgeR)
+</pre>
+</div>
+
+<p>
+Reads in your data and reformat data into a DGElist that are suitable
+for de analysis. I also estimate normfactor to take library sizes
+differences into account.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">bc <span style="color: #e9b2e3;">&lt;-</span> read.table(<span style="color: #e9b96e;">"brain-counts.txt"</span>, header = <span style="color: #8cc4ff;">TRUE</span>)
+meta <span style="color: #e9b2e3;">&lt;-</span> read.table(<span style="color: #e9b96e;">"brain-meta.txt"</span>, header = <span style="color: #8cc4ff;">TRUE</span>)
+
+meta$condition <span style="color: #e9b2e3;">&lt;-</span> relevel(meta$condition, ref = <span style="color: #e9b96e;">"sat"</span>)
+meta$family <span style="color: #e9b2e3;">&lt;-</span> as.factor(meta$family)
+mod <span style="color: #e9b2e3;">&lt;-</span> model.matrix(~meta$family+meta$condition )
+
+y <span style="color: #e9b2e3;">&lt;-</span> DGEList(counts = bc, genes = row.names(bc), group = meta$condition)
+y <span style="color: #e9b2e3;">&lt;-</span> calcNormFactors(y)
+</pre>
+</div>
+
+<p>
+Using voom to convert counts to log2 scale and also estimate a weight
+for each gene that is later used in the lmFit function.
+</p>
+
+<p>
+The summary shows that 0 genes are significant for the condition and
+there seem to be large differences between between family 19 compared
+to the rest which is due to the fact that this family have many
+samples with low at the rinbatch factor, so it is likely to mostly
+reflect this.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #73d216;"># </span><span style="color: #73d216;">limma with blocking for family</span>
+<span style="color: #73d216;"># </span><span style="color: #73d216;">Gives 0 significant genes for lat/sat</span>
+y.voom <span style="color: #e9b2e3;">&lt;-</span> voom(y, des = mod)
+fit.y <span style="color: #e9b2e3;">&lt;-</span> lmFit(y.voom, des = mod)
+fit.y <span style="color: #e9b2e3;">&lt;-</span> eBayes(fit.y)
+summary(dt.y <span style="color: #e9b2e3;">&lt;-</span> decideTests(fit.y))
+topTable(fit.y, coef = 5)
+</pre>
+</div>
+
+<pre class="example">
+   (Intercept) meta$family16 meta$family19 meta$family20 meta$conditionlat
+-1         135             0          2394             1                 0
+0         2703         20860         17075         20852             20861
+1        18023             1          1392             8                 0
+                                genes      logFC  AveExpr         t
+ENSDARG00000038213 ENSDARG00000038213 -0.2571926 4.477578 -3.874298
+ENSDARG00000024877 ENSDARG00000024877 -0.8697534 4.511426 -3.743882
+ENSDARG00000045367 ENSDARG00000045367  1.0291212 4.302541  3.644256
+ENSDARG00000102403 ENSDARG00000102403  0.3114920 5.825162  3.296172
+ENSDARG00000096904 ENSDARG00000096904 -0.5924871 3.541640 -3.561318
+ENSDARG00000069589 ENSDARG00000069589 -0.2506152 3.680434 -3.462826
+ENSDARG00000000796 ENSDARG00000000796 -0.5645205 3.964481 -3.378700
+ENSDARG00000101726 ENSDARG00000101726  0.6844830 3.870745  3.349761
+ENSDARG00000069498 ENSDARG00000069498  0.3885613 2.367423  3.957819
+ENSDARG00000077180 ENSDARG00000077180  0.2960716 3.999188  3.199637
+                        P.Value adj.P.Val         B
+ENSDARG00000038213 0.0004176489 0.9999821 -2.585068
+ENSDARG00000024877 0.0006099773 0.9999821 -2.723873
+ENSDARG00000045367 0.0008121738 0.9999821 -2.906091
+ENSDARG00000102403 0.0021570005 0.9999821 -3.016529
+ENSDARG00000096904 0.0010285303 0.9999821 -3.075896
+ENSDARG00000069589 0.0013578367 0.9999821 -3.108228
+ENSDARG00000000796 0.0017171893 0.9999821 -3.137574
+ENSDARG00000101726 0.0018606281 0.9999821 -3.183842
+ENSDARG00000069498 0.0003269599 0.9999821 -3.242570
+ENSDARG00000077180 0.0028078243 0.9999821 -3.254578
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org6d0d1d9" class="outline-3">
+<h3 id="org6d0d1d9"><span class="section-number-3">1.2</span> Blocking and voom with weights</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+In this section we have the same results, but with the alternative
+voomWithWeights function. It alters things quite drastically, which
+oftem makes me a bit worried as it moves us far from the raw
+counts. Looking at the estimated weights it is basically downweighting
+the samples that is far from the main cluster in the MDS plot. So the
+samples from fam. 13 that in your MDS plot is forming a group clearly
+sep. from the main cluster along axis 3 have estimated weights between
+0.32, 0.16 and 0.18. The samples that are clearly sep. along the first
+dimension have weights lower than 0.05 and there signal will hence
+contribute much less to the inferred expression pattern.
+</p>
+
+<p>
+Due to my limited experience with this, I would in your place still
+focus my analysis on the samples that behaves as expected and omit the
+rest. It is however somewhat re-assuring that among the 48 significant
+genes with this approach, we find all genes that are significant in
+the analysis where these samples are excluded, so the approach is not
+interrupting this signal.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">y.voomW <span style="color: #e9b2e3;">&lt;-</span> voomWithQualityWeights(y, des = mod)
+fit.yw <span style="color: #e9b2e3;">&lt;-</span> lmFit(y.voomW, des = mod)
+fit.yw <span style="color: #e9b2e3;">&lt;-</span> eBayes(fit.yw)
+summary(dt.yw <span style="color: #e9b2e3;">&lt;-</span> decideTests(fit.yw))
+topTable(fit.yw, coef = 5)
+</pre>
+</div>
+
+<pre class="example">
+   (Intercept) meta$family16 meta$family19 meta$family20 meta$conditionlat
+-1         448           970           188           331                23
+0         1613         19218         20518         20177             20813
+1        18800           673           155           353                25
+                                genes      logFC   AveExpr         t
+ENSDARG00000101726 ENSDARG00000101726  0.8742591 3.8707450  6.147013
+ENSDARG00000012499 ENSDARG00000012499  0.3504051 7.0847155  6.174131
+ENSDARG00000102403 ENSDARG00000102403  0.3327276 5.8251616  6.030203
+ENSDARG00000104818 ENSDARG00000104818  0.8157812 3.4364518  5.966072
+ENSDARG00000000212 ENSDARG00000000212 -1.5210869 0.9591816 -6.096417
+ENSDARG00000045367 ENSDARG00000045367  1.3598822 4.3025407  5.837156
+ENSDARG00000024877 ENSDARG00000024877 -1.0314416 4.5114261 -5.824597
+ENSDARG00000000796 ENSDARG00000000796 -0.7051283 3.9644808 -5.700994
+ENSDARG00000069262 ENSDARG00000069262  0.4843307 3.8443761  5.634835
+ENSDARG00000040536 ENSDARG00000040536 -0.7757342 2.2704160 -5.520455
+                        P.Value   adj.P.Val        B
+ENSDARG00000101726 2.744277e-07 0.001676650 6.776055
+ENSDARG00000012499 2.511736e-07 0.001676650 6.759785
+ENSDARG00000102403 4.018624e-07 0.001676650 6.316085
+ENSDARG00000104818 4.954655e-07 0.001722651 6.212450
+ENSDARG00000000212 3.237266e-07 0.001676650 5.899153
+ENSDARG00000045367 7.546467e-07 0.002050142 5.796014
+ENSDARG00000024877 7.862106e-07 0.002050142 5.749124
+ENSDARG00000000796 1.176445e-06 0.002726868 5.380422
+ENSDARG00000069262 1.459386e-06 0.003044425 5.189759
+ENSDARG00000040536 2.117372e-06 0.004015500 4.768774
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orgb50298b" class="outline-3">
+<h3 id="orgb50298b"><span class="section-number-3">1.3</span> Omitting the "odd" samples</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Below I have done the same analysis as above, but I have omitted the
+samples that are clustering outside the main cluster in the MDS. Doing
+this reveals a small number of genes that are different between Sat
+and Lat. For the sake of making my tests complete I also include
+weights here and that increases the number of significant genes. The
+later analysis reveals 2 genes that are not found among the
+significant from weighted analysis of the complete data above, but
+overall the patterns are largely the same.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-R">meta2 <span style="color: #e9b2e3;">&lt;-</span> meta[meta$rinbatch !=<span style="color: #e9b96e;">"low"</span>,]
+bc2 <span style="color: #e9b2e3;">&lt;-</span> bc[,colnames(bc)<span style="color: #e9b2e3;">%in%</span>row.names(meta2)]
+meta2$condition <span style="color: #e9b2e3;">&lt;-</span> relevel(meta2$condition, ref = <span style="color: #e9b96e;">"sat"</span>)
+meta2$family <span style="color: #e9b2e3;">&lt;-</span> as.factor(meta2$family)
+mod2 <span style="color: #e9b2e3;">&lt;-</span> model.matrix(~meta2$family+meta2$condition )
+
+y2 <span style="color: #e9b2e3;">&lt;-</span> DGEList(counts = bc2, genes = row.names(bc2), group = meta2$condition)
+y2 <span style="color: #e9b2e3;">&lt;-</span> calcNormFactors(y2)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">y.voom2 <span style="color: #e9b2e3;">&lt;-</span> voom(y2, des = mod2)
+fit.y2 <span style="color: #e9b2e3;">&lt;-</span> lmFit(y.voom2, des = mod2)
+fit.y2 <span style="color: #e9b2e3;">&lt;-</span> eBayes(fit.y2)
+summary(dt.y2 <span style="color: #e9b2e3;">&lt;-</span> decideTests(fit.y2))
+topTable(fit.y2, coef = 5)
+</pre>
+</div>
+
+<pre class="example">
+   (Intercept) meta2$family16 meta2$family19 meta2$family20 meta2$conditionlat
+-1         398            750             40             63                  3
+0         1804          19736          20802          20733              20851
+1        18659            375             19             65                  7
+                                genes      logFC   AveExpr         t
+ENSDARG00000069262 ENSDARG00000069262  0.4581458 3.4395424  6.597473
+ENSDARG00000045768 ENSDARG00000045768  0.2958556 6.7019539  6.091893
+ENSDARG00000102403 ENSDARG00000102403  0.3503684 5.8042317  6.024707
+ENSDARG00000012499 ENSDARG00000012499  0.3615351 7.2026446  5.714886
+ENSDARG00000024877 ENSDARG00000024877 -1.1013067 4.2632573 -5.520183
+ENSDARG00000086933 ENSDARG00000086933  0.7217278 2.1742931  5.333333
+ENSDARG00000000212 ENSDARG00000000212 -1.5575497 0.6753062 -5.590954
+ENSDARG00000078567 ENSDARG00000078567  0.3229310 5.7934707  5.163730
+ENSDARG00000101726 ENSDARG00000101726  0.8265865 3.5768913  4.856424
+ENSDARG00000098899 ENSDARG00000098899 -0.6156610 4.6572151 -4.815047
+                        P.Value   adj.P.Val        B
+ENSDARG00000069262 1.997158e-07 0.004166272 7.022350
+ENSDARG00000045768 8.497327e-07 0.007171621 5.752628
+ENSDARG00000102403 1.031344e-06 0.007171621 5.580309
+ENSDARG00000012499 2.526621e-06 0.011994120 4.692468
+ENSDARG00000024877 4.444638e-06 0.013245655 4.212869
+ENSDARG00000086933 7.647223e-06 0.019941090 3.464674
+ENSDARG00000000212 3.619347e-06 0.012583868 3.394976
+ENSDARG00000078567 1.251509e-05 0.029008596 3.183816
+ENSDARG00000101726 3.050809e-05 0.053035780 2.418071
+ENSDARG00000098899 3.438739e-05 0.055181184 2.275077
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-R">y.voom22 <span style="color: #e9b2e3;">&lt;-</span> voomWithQualityWeights(y2, des = mod2)
+fit.y22 <span style="color: #e9b2e3;">&lt;-</span> lmFit(y.voom22, des = mod2)
+fit.y22 <span style="color: #e9b2e3;">&lt;-</span> eBayes(fit.y22)
+summary(dt.y22 <span style="color: #e9b2e3;">&lt;-</span> decideTests(fit.y22))
+topTable(fit.y22, coef = 5)
+</pre>
+</div>
+
+<pre class="example">
+   (Intercept) meta2$family16 meta2$family19 meta2$family20 meta2$conditionlat
+-1         441           2118            163            508                 11
+0         1732          17395          20590          19954              20834
+1        18688           1348            108            399                 16
+                                genes      logFC   AveExpr         t
+ENSDARG00000069262 ENSDARG00000069262  0.4914066 3.4395424  7.275510
+ENSDARG00000012499 ENSDARG00000012499  0.3530555 7.2026446  6.372873
+ENSDARG00000102403 ENSDARG00000102403  0.3293710 5.8042317  5.865138
+ENSDARG00000086933 ENSDARG00000086933  0.7728629 2.1742931  5.896854
+ENSDARG00000070971 ENSDARG00000070971  0.4855436 6.0660989  5.823174
+ENSDARG00000045768 ENSDARG00000045768  0.2643559 6.7019539  5.689056
+ENSDARG00000101726 ENSDARG00000101726  0.8699100 3.5768913  5.537323
+ENSDARG00000104818 ENSDARG00000104818  0.8168754 3.1469681  5.454815
+ENSDARG00000000212 ENSDARG00000000212 -1.5529246 0.6753062 -5.679082
+ENSDARG00000078567 ENSDARG00000078567  0.2957581 5.7934707  5.388188
+                        P.Value    adj.P.Val        B
+ENSDARG00000069262 2.717201e-08 0.0005668352 8.964528
+ENSDARG00000012499 3.553188e-07 0.0037061523 6.500055
+ENSDARG00000102403 1.550444e-06 0.0073106126 5.114299
+ENSDARG00000086933 1.413576e-06 0.0073106126 5.053914
+ENSDARG00000070971 1.752220e-06 0.0073106126 4.979699
+ENSDARG00000045768 2.591667e-06 0.0079518440 4.570791
+ENSDARG00000101726 4.037805e-06 0.0096445442 4.299145
+ENSDARG00000104818 5.139578e-06 0.0107216737 4.065371
+ENSDARG00000000212 2.668276e-06 0.0079518440 3.851922
+ENSDARG00000078567 6.245376e-06 0.0118440723 3.757336
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: June, 2017</p>
+<p class="author">Author: Thomas Källman</p>
+<p class="date">Created: 2017-10-08 Sun 08:43</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
